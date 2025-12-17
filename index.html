@@ -1,338 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ewell Delivery Team</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
-  body {
-    font-family: 'Orbitron', sans-serif;
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(to bottom right, #1e40ff, #000);
-    color: #fff;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+:root{
+  --bg:#000; --surface:#111; --border:#2a2a2a; --text:#fff;
+  --input-bg:#000; --blue:#1e90ff; --blue-dark:#1c6ed1; --shadow:0 20px 40px rgba(0,0,0,.6);
+}
+body.light{ --bg:#f4f6f8; --surface:#fff; --border:#d0d7de; --text:#000; --input-bg:#f9f9f9; --shadow:0 20px 40px rgba(0,0,0,.15); }
 
-  header {
-    background: rgba(0, 0, 0, 0.8);
-    padding: 2rem 1rem 1rem 1rem;
-    border-bottom: 5px solid #1e90ff;
-    text-align: center;
-    position: relative;
-  }
+body{ margin:0; font-family:'Orbitron',sans-serif; background:var(--bg); color:var(--text); transition:.4s; }
 
-  h1 {
-    font-size: 3rem;
-    text-transform: uppercase;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
-  }
+header{ background:var(--bg); padding:32px 20px 24px; border-bottom:4px solid var(--blue); text-align:center; position:relative; transition:.4s; }
+header h1{ margin:0; font-size:42px; } header p{ margin-top:8px; opacity:.85; }
 
-  p {
-    margin-top: 10px;
-  }
+.top-buttons{ position:absolute; top:20px; right:20px; display:flex; gap:12px; }
+.icon-btn{ width:52px; height:52px; border-radius:50%; background:var(--blue); color:#fff; border:none; font-size:20px; cursor:pointer; box-shadow:0 6px 18px rgba(30,144,255,.6); display:flex; align-items:center; justify-content:center; transition:.25s; }
+.icon-btn:hover{ filter:brightness(1.2); transform:scale(1.1); }
 
-  .menu-btn {
-    background-color: #1e90ff;
-    color: white;
-    font-size: 1.2rem;
-    padding: 0.8rem 1.5rem;
-    border-radius: 8px;
-    cursor: pointer;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    border: none;
-    font-family: 'Orbitron', sans-serif;
-    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 12px rgba(30, 144, 255, 0.6);
-  }
+.content{ padding:80px 0; }
 
-  .menu-btn i {
-    margin-right: 8px;
-  }
+.card{
+  background:var(--surface);
+  border-radius:48px;
+  padding:64px;
+  border:3px solid var(--border);
+  box-shadow:var(--shadow);
+  width:100%;
+  max-width:1500px; /* restored max width */
+  margin:0 auto 120px auto;
+  display:flex;
+  flex-direction:column;
+  transition:.4s;
+}
+.card h2{ font-size:42px; margin-top:0; }
+.form-group{ margin-bottom:24px; } label{ display:block; margin-bottom:8px; }
+input,textarea{ width:100%; padding:18px 24px; border-radius:24px; border:2px solid var(--border); background:var(--input-bg); color:var(--text); font-family:'Orbitron',sans-serif; font-size:16px; }
+textarea{ resize:none; height:90px; }
 
-  .menu-btn:hover {
-    transform: scale(1.05);
-    background-color: #1c6ed1;
-    box-shadow: 0 4px 20px rgba(30, 144, 255, 1);
-  }
+.form-actions{ margin-top:32px; display:flex; gap:24px; }
+.action-btn{ width:64px; height:64px; border-radius:50%; background:var(--blue); border:none; color:#fff; font-size:22px; cursor:pointer; box-shadow:0 8px 20px rgba(30,144,255,.6); transition:.25s; }
+.action-btn:hover{ transform:scale(1.1); }
 
-  /* Sidebar styles */
-  #menuDropdown {
-    position: fixed;
-    top: 0;
-    right: 0;
-    height: 100%;
-    width: 250px;
-    background-color: #111;
-    padding: 2rem 1rem;
-    box-shadow: -5px 0 15px rgba(0,0,0,0.6);
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    transform: translateX(100%);
-    transition: transform 0.4s ease-in-out;
-  }
+.result{ margin-top:24px; color:var(--blue); }
 
-  #menuDropdown.active {
-    transform: translateX(0);
-  }
+#settingsOverlay{ position:fixed; inset:0; background:var(--bg); display:none; z-index:2000; padding:40px 20px; }
+#settingsOverlay.active{ display:block; }
+.settings-card{ max-width:800px; margin:0 auto; background:var(--surface); border-radius:48px; padding:64px; border:3px solid var(--border); box-shadow:var(--shadow); position:relative; transition:.4s; }
 
-  #menuDropdown .close-btn {
-    background: transparent;
-    border: none;
-    color: #fff;
-    font-size: 1.8rem;
-    align-self: flex-end;
-    cursor: pointer;
-    margin-bottom: 1rem;
-  }
+.close-settings{
+  position:absolute;
+  top:24px;
+  right:24px;
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  border:none;
+  color:#fff;
+  font-size:22px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 6px 18px rgba(30,144,255,.6);
+  transition:.25s;
+}
+.close-settings:hover{ filter:brightness(1.2); transform:scale(1.1); }
 
-  #menuDropdown a {
-    background-color: #28a745;
-    color: white;
-    padding: 0.8rem 1rem;
-    text-decoration: none;
-    border-radius: 6px;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    transition: background-color 0.3s ease;
-  }
+.theme-switch{ margin-top:48px; display:flex; align-items:center; gap:12px; position:relative; }
+.theme-switch input{ display:none; }
+.switch{ width:90px; height:44px; background:#333; border-radius:30px; position:relative; cursor:pointer; transition:.4s; }
+.switch::after{ content:""; width:36px; height:36px; background:#111; border-radius:50%; position:absolute; top:4px; left:4px; transition:.4s; }
 
-  #menuDropdown a i {
-    margin-right: 8px;
-  }
+.bulb{ position:absolute; top:50%; left:22px; transform:translate(-50%,-50%); font-size:16px; color:#fff; transition:.4s; z-index:2; }
+.bulb-glow{ position:absolute; top:50%; left:22px; transform:translate(-50%,-50%); width:36px; height:36px; border-radius:50%; background:radial-gradient(circle, rgba(255,255,255,.7), transparent 60%); opacity:0; transition:.4s; z-index:1; }
 
-  #menuDropdown a:hover {
-    background-color: #218838;
-  }
+.theme-switch input:checked + .switch{ background:var(--blue); }
+.theme-switch input:checked + .switch::after{ left:50px; background:#fff; }
+.theme-switch input:checked + .switch .bulb{ color:#000; left:68px; }
+.theme-switch input:checked + .switch .bulb-glow{ opacity:1; left:68px; }
 
-  /* Backdrop for sidebar */
-  #sidebarBackdrop {
-    position: fixed;
-    top:0;
-    left:0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0,0,0,0.5);
-    z-index: 900;
-    display: none;
-  }
+.color-buttons{ margin-top:24px; display:flex; flex-wrap:wrap; gap:10px; }
+.color-btn{ width:40px; height:40px; border-radius:50%; border:2px solid #fff; cursor:pointer; transition:.3s; }
 
-  #sidebarBackdrop.active {
-    display: block;
-  }
-
-  .content {
-    padding: 1.5rem;
-    text-align: center;
-  }
-
-  .card {
-    background: #222;
-    padding: 1.5rem;
-    margin: 1.5rem auto;
-    max-width: device-width;
-    border-radius: 12px;
-    box-shadow: 0 10px 15px rgba(0,0,0,0.5);
-  }
-
-  .form-group {
-    margin-bottom: 1rem;
-    text-align: left;
-  }
-
-  label {
-    font-weight: bold;
-    color: #f1f1f1;
-  }
-
-  input, textarea {
-    width: 97.5%;
-    padding: 0.8rem;
-    margin-top: 0.3rem;
-    border: 2px solid #1e90ff;
-    border-radius: 8px;
-    background: #000;
-    color: #fff;
-  }
-
-  .btn {
-    background: #28a745;
-    color: white;
-    border: none;
-    padding: 1rem;
-    border-radius: 8px;
-    cursor: pointer;
-    width: 100%;
-    font-size: 1.1rem;
-    margin-top: 1rem;
-    transition: transform 0.3s ease, background-color 0.3s ease;
-    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.6);
-  }
-
-  .btn:hover {
-    transform: scale(1.05);
-    background-color: #218838;
-  }
-
-  #trackingResult {
-    margin-top: 1rem;
-    font-weight: bold;
-    color: #1e90ff;
-  }
-
-  .footer {
-    text-align: center;
-    font-size: 0.9rem;
-    color: #ccc;
-    padding: 1.5rem;
-  }
-
-  @media (max-width: 600px) {
-    h1 {
-      font-size: 1.5rem;
-    }
-    .btn {
-      font-size: 1rem;
-      padding: 0.8rem;
-    }
-    .menu-btn {
-      font-size: 1rem;
-      padding: 0.6rem 1.2rem;
-    }
-    #menuDropdown a {
-      font-size: 1rem;
-      padding: 0.8rem;
-    }
-  }
+@media(max-width:600px){ header h1{ font-size:28px; } .card{ padding:40px; } .card h2{ font-size:30px; } }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Ewell Delivery Team</h1>
-  <p>Fast. Reliable. Local.</p>
-  <button class="menu-btn" onclick="toggleMenu()">
-    <i class="fas fa-bars"></i> Menu
-  </button>
+<h1>Ewell Delivery Team</h1>
+<p>Fast. Reliable. Local.</p>
+<div class="top-buttons">
+  <button class="icon-btn" onclick="openSettings()"><i class="fas fa-gear"></i></button>
+  <button class="icon-btn" onclick="location.href='comix.html'"><i class="fas fa-book-open"></i></button>
+  <button class="icon-btn" onclick="location.href='cart.html'"><i class="fas fa-shopping-cart"></i></button>
+</div>
 </header>
 
-<!-- Sidebar Backdrop -->
-<div id="sidebarBackdrop" onclick="toggleMenu()"></div>
-
-<!-- Sidebar Menu -->
-<nav id="menuDropdown" aria-label="Sidebar Navigation">
-  <button class="close-btn" aria-label="Close Menu" onclick="toggleMenu()">
-    <i class="fas fa-times"></i>
-  </button>
-  <a href="comix.html"><i class="fas fa-book-open"></i> EDT Comix</a>
-  <a href="cart.html"><i class="fas fa-shopping-cart"></i> Check Cart</a>
-</nav>
-
 <div class="content">
-  <div class="card">
-    <h2>Schedule a Delivery</h2>
-    <form id="deliveryForm">
-      <div class="form-group">
-        <label for="customerName">Customer Name</label>
-        <input type="text" id="customerName" placeholder="Enter your name" required />
-      </div>
-      <div class="form-group">
-        <label for="customerAddress">Address</label>
-        <textarea id="customerAddress" rows="3" placeholder="Enter your delivery address" required></textarea>
-      </div>
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" placeholder="Enter your email" required />
-      </div>
-      <div class="form-group">
-        <label for="phone">Phone Number</label>
-        <input type="tel" id="phone" placeholder="Enter your phone number" required />
-      </div>
-      <div class="form-group">
-        <label for="itemSelect">Item for Delivery</label>
-        <input type="text" id="itemSelect" list="itemOptions" placeholder="Enter/Choose your item" required />
-        <datalist id="itemOptions">
-          <option value="Package">
-          <option value="Furniture">
-          <option value="Groceries">
-          <option value="Electronics">
-        </datalist>
-      </div>
-      <button type="button" class="btn" onclick="generateTrackingCode()">
-        <i class="fas fa-box"></i>&nbsp;Schedule Delivery
-      </button>
-      <button type="button" class="btn" onclick="addToCart()">
-        <i class="fas fa-cart-plus"></i>&nbsp;Add to Cart
-      </button>
-    </form>
-  </div>
-
-  <div class="card" id="track">
-    <h2>Track Your Package</h2>
-    <form id="trackForm">
-      <div class="form-group">
-        <label for="trackingNumber">Tracking Number</label>
-        <input type="text" id="trackingNumber" placeholder="Enter 5-character tracking number" required />
-      </div>
-      <button type="button" class="btn" onclick="trackPackage()">
-        <i class="fas fa-truck-moving"></i>&nbsp;Track Package
-      </button>
-    </form>
-    <div id="trackingResult"></div>
-  </div>
+<div class="card">
+<h2>Schedule a Delivery</h2>
+<div class="form-group"><label>Customer Name</label><input id="customerName"></div>
+<div class="form-group"><label>Email</label><input id="email" type="email"></div>
+<div class="form-group"><label>Delivery Address</label><textarea id="address"></textarea></div>
+<div class="form-group"><label>Item Description</label><input id="item"></div>
+<div class="form-actions">
+<button class="action-btn" onclick="generateTrackingCode()"><i class="fas fa-box"></i></button>
+<button class="action-btn" onclick="addToCart()"><i class="fas fa-cart-plus"></i></button>
+</div>
 </div>
 
-<p class="footer">&copy; 2025 Ewell Delivery Team | All Rights Reserved</p>
+<div class="card">
+<h2>Track Your Package</h2>
+<div class="form-group"><label>Tracking Number</label><input id="trackingNumber"></div>
+<div class="form-actions">
+<button class="action-btn" onclick="trackPackage()"><i class="fas fa-truck-moving"></i></button>
+</div>
+<div id="trackingResult" class="result"></div>
+</div>
+</div>
+
+<div id="settingsOverlay">
+<div class="settings-card">
+<button class="close-settings"><i class="fas fa-xmark"></i></button>
+<h2>Settings</h2>
+
+<div class="theme-switch">
+<label>
+<input type="checkbox" id="themeToggle">
+<div class="switch">
+<i class="fas fa-lightbulb bulb"></i>
+<div class="bulb-glow"></div>
+</div>
+</label>
+<span id="themeLabel">Light Mode</span>
+</div>
+
+<h3 style="margin-top:30px;">Tint Colors</h3>
+<div class="color-buttons">
+  <div class="color-btn" style="background:#1e90ff" onclick="changeColor('#1e90ff')"></div>
+  <div class="color-btn" style="background:#28a745" onclick="changeColor('#28a745')"></div>
+  <div class="color-btn" style="background:#dc3545" onclick="changeColor('#dc3545')"></div>
+  <div class="color-btn" style="background:#ffc107" onclick="changeColor('#ffc107')"></div>
+  <div class="color-btn" style="background:#6f42c1" onclick="changeColor('#6f42c1')"></div>
+  <div class="color-btn" style="background:#fd7e14" onclick="changeColor('#fd7e14')"></div>
+  <div class="color-btn" style="background:#20c997" onclick="changeColor('#20c997')"></div>
+  <div class="color-btn" style="background:#e83e8c" onclick="changeColor('#e83e8c')"></div>
+  <div class="color-btn" style="background:#17a2b8" onclick="changeColor('#17a2b8')"></div>
+  <div class="color-btn" style="background:#343a40" onclick="changeColor('#343a40')"></div>
+</div>
+</div>
+</div>
 
 <script>
-  const menuDropdown = document.getElementById('menuDropdown');
-  const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+const settingsOverlay=document.getElementById('settingsOverlay');
+const toggle=document.getElementById('themeToggle');
+const label=document.getElementById('themeLabel');
+const actionButtons=document.querySelectorAll('.action-btn');
+const topButtons=document.querySelectorAll('.top-buttons .icon-btn');
+const closeBtn=document.querySelector('.close-settings');
+const switchBtn=document.querySelector('.switch');
+const headerEl=document.querySelector('header');
 
-  function toggleMenu() {
-    const isActive = menuDropdown.classList.contains('active');
-    if (isActive) {
-      menuDropdown.classList.remove('active');
-      sidebarBackdrop.classList.remove('active');
-    } else {
-      menuDropdown.classList.add('active');
-      sidebarBackdrop.classList.add('active');
-    }
+function openSettings(){ settingsOverlay.classList.add('active'); }
+function closeSettings(){ settingsOverlay.classList.remove('active'); }
+
+toggle.addEventListener('change',()=>{
+  document.body.classList.toggle('light', toggle.checked);
+  label.textContent = toggle.checked ? 'Dark Mode' : 'Light Mode';
+});
+
+closeBtn.addEventListener('click',closeSettings);
+
+function addToCart(){ alert('Item added to cart!'); }
+function generateTrackingCode(){
+  if(!customerName.value || !email.value || !address.value || !item.value){
+    alert('Please fill out all delivery details.'); return;
   }
+  const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let code=''; for(let i=0;i<5;i++) code+=chars[Math.floor(Math.random()*chars.length)];
+  trackingNumber.value=code; alert('Delivery scheduled! Tracking code: '+code);
+}
+function trackPackage(){
+  trackingResult.textContent=/^[A-Z0-9]{5}$/.test(trackingNumber.value)
+    ? 'Package is in transit.'
+    : 'Invalid tracking number.';
+}
 
-  function addToCart() {
-    alert('Item added to cart!');
-  }
-
-  function generateTrackingCode() {
-    const chars = 'QWERTYUIOPASDFGHJKLZXCVBNM0123456789';
-    let code = '';
-    for (let i = 0; i < 5; i++) {
-      code += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    document.getElementById('trackingNumber').value = code;
-    alert(`Delivery scheduled! Your tracking code is: ${code}`);
-  }
-
-  function trackPackage() {
-    const trackingNumber = document.getElementById('trackingNumber').value.trim();
-    const resultBox = document.getElementById('trackingResult');
-    const validPattern = /^[A-Z0-9]{5}$/;
-
-    if (!validPattern.test(trackingNumber)) {
-      resultBox.textContent = "Tracking number must be exactly 5 letters or digits.";
-      return;
-    }
-
-    resultBox.textContent = `Tracking info for "${trackingNumber}": Package is in transit.`;
-  }
+function changeColor(color){
+  const shadowColor = color + '66';
+  actionButtons.forEach(btn=>{
+    btn.style.background = color;
+    btn.style.boxShadow = `0 8px 20px ${shadowColor}`;
+  });
+  topButtons.forEach(btn=>{
+    btn.style.background = color;
+    btn.style.boxShadow = `0 6px 18px ${shadowColor}`;
+  });
+  closeBtn.style.background = color;
+  closeBtn.style.boxShadow = `0 6px 18px ${shadowColor}`;
+  switchBtn.style.background = color;
+  headerEl.style.borderBottomColor = color;
+}
 </script>
+
 </body>
 </html>
