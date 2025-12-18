@@ -1,424 +1,401 @@
 <!DOCTYPE HTML>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EDT</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
-<style>
-:root{
-  --bg:#000;
-  --surface:#111;
-  --border:#2a2a2a;
-  --text:#fff;
-  --input-bg:#000;
-  --blue:#1e90ff;
-  --blue-dark:#1c6ed1;
-  --shadow:0 20px 40px rgba(0,0,0,.6);
-}
-
-body.light{
-  --bg:#f4f6f8;
-  --surface:#fff;
-  --border:#d0d7de;
-  --text:#000;
-  --input-bg:#f9f9f9;
-  --shadow:0 20px 40px rgba(0,0,0,.15);
-}
-
-body{
-  margin:0;
-  font-family:'Orbitron',sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  transition:.4s;
-}
-  
- head{
-   box-sizing: border-box;
-}
-
-header {
-  position: relative;
-  width: 100%;  /* full screen width */
-}
-
-header::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100vw;  /* full viewport width */
-  height: 4px;
-  background: var(--blue);
-}
-
-header h1{ margin:0; font-size:42px; }
-header p{ margin-top:8px; opacity:.85; }
-
-.top-buttons{
-  position:absolute;
-  top:20px;
-  right:20px;
-  display:flex;
-  gap:12px;
-}
-
-.icon-btn{
-  width:52px;
-  height:52px;
-  border-radius:50%;
-  background:var(--blue);
-  color:#fff;
-  border:none;
-  font-size:20px;
-  cursor:pointer;
-  box-shadow:0 6px 18px rgba(30,144,255,.6);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  transition:.25s;
-}
-
-.icon-btn:hover{
-  transform:scale(1.1);
-  filter:brightness(1.15);
-}
-
-.content{ padding:80px 0; }
-
-.card{
-  background:var(--surface);
-  border-radius:48px;
-  padding:48px;
-  border:3px solid var(--border);
-  box-shadow:var(--shadow);
-  width:100%;
-  max-width: 1500px;
-  margin:0 auto 120px;
-  display:flex;
-  flex-direction:column;
-}
-
-.card h2{ font-size:42px; margin-top:0; }
-
-.form-group{ margin-bottom:24px; }
-label{ display:block; margin-bottom:8px; }
-
-input, textarea{
-  width:100%;
-  padding:18px 24px;
-  border-radius:24px;
-  border:2px solid var(--border);
-  background:var(--input-bg);
-  color:var(--text);
-  font-family:'Orbitron',sans-serif;
-}
-
-textarea{ resize:none; height:90px; }
-
-.form-actions{
-  margin-top:32px;
-  display:flex;
-  gap:24px;
-}
-
-.action-btn{
-  width:64px;
-  height:64px;
-  border-radius:50%;
-  background:var(--blue);
-  border:none;
-  color:#fff;
-  font-size:22px;
-  cursor:pointer;
-  box-shadow:0 8px 20px rgba(30,144,255,.6);
-  transition:.25s;
-}
-
-.action-btn:hover{ transform:scale(1.1); }
-
-.result{ margin-top:24px; color:var(--blue); }
-
-#settingsOverlay{
-  position:fixed;
-  inset:0;
-  background:var(--bg);
-  display:none;
-  z-index:2000;
-  padding:40px 20px;
-}
-
-#settingsOverlay.active{ display:block; }
-
-.settings-card{
-  max-width:800px;
-  margin:0 auto;
-  background:var(--surface);
-  border-radius:48px;
-  padding:64px;
-  border:3px solid var(--border);
-  box-shadow:var(--shadow);
-  position:relative;
-}
-
-.close-settings{
-  position:absolute;
-  top:24px;
-  right:24px;
-  width:52px;
-  height:52px;
-  border-radius:50%;
-  background:var(--blue);
-  border:none;
-  color:#fff;
-  font-size:22px;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  box-shadow:0 6px 18px rgba(30,144,255,.6);
-  transition:.25s;
-}
-
-.close-settings:hover{
-  transform:scale(1.1);
-  filter:brightness(1.15);
-}
-
-.theme-switch{
-  margin-top:48px;
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.theme-switch input{ display:none; }
-
-.switch{
-  width:90px;
-  height:44px;
-  background:var(--border);
-  border-radius:30px;
-  position:relative;
-  cursor:pointer;
-  transition:.4s;
-}
-
-.switch::after{
-  content:"";
-  width:36px;
-  height:36px;
-  background:var(--bg);
-  border-radius:50%;
-  position:absolute;
-  top:4px;
-  left:4px;
-  transition:.4s;
-}
-
-.bulb{
-  position:absolute;
-  top:50%;
-  left:22px;
-  transform:translate(-50%,-50%);
-  font-size:16px;
-  color:#ffffff;
-  z-index:2;
-  transition:.4s;
-}
-
-.bulb-glow{
-  opacity: 0;
-  transition: .4s;
-}
-  
-.theme-switch input:checked + .switch{
-  background:var(--blue);
-}
-
-.theme-switch input:checked + .switch::after{
-  left:50px;
-  background:#fff;
-}
-
-.theme-switch input:checked + .switch .bulb{
-  left:68px;
-  color:#000;
-}
-
-.theme-switch input:checked + .switch .bulb-glow{
-  left:68px;
-  opacity:1;
-}
-
-.color-buttons{
-  margin-top:24px;
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-}
-
-.color-btn{
-  width:40px;
-  height:40px;
-  border-radius:50%;
-  border:2px solid #000000;
-  cursor:pointer;
-}
-
-@media(max-width:768px){
-  .card{
-    padding:24px;
-  }
-}
-
-</style>
-</head>
-
-<body>
-
-<header>
-<h1>EWELL DELIVERY TEAM</h1>
-<p>Delivery built with care.</p>
-
-<div class="top-buttons">
-  <button class="icon-btn" onclick="openSettings()"><i class="fas fa-gear"></i></button>
-  <button class="icon-btn" onclick="location.href='comix.html'"><i class="fas fa-book-open"></i></button>
-  <button class="icon-btn" onclick="location.href='cart.html'"><i class="fas fa-shopping-cart"></i></button>
-</div>
-</header>
-
-<div class="content">
-
-<div class="card">
-<h2>Schedule a Delivery</h2>
-
-<div class="form-group"><label>Customer Name</label><input id="customerName"></div>
-<div class="form-group"><label>Email</label><input id="email" type="email"></div>
-<div class="form-group"><label>Delivery Address</label><textarea id="address"></textarea></div>
-<div class="form-group"><label>Item(s)</label><input id="item"></div>
-
-<div class="form-actions">
-<button class="action-btn" onclick="generateTrackingCode()"><i class="fas fa-box"></i></button>
-<button class="action-btn" onclick="addToCart()"><i class="fas fa-cart-plus"></i></button>
-</div>
-</div>
-
-<div class="card">
-<h2>Track Your Package</h2>
-<div class="form-group"><label>Tracking Number</label><input id="trackingNumber"></div>
-
-<div class="form-actions">
-<button class="action-btn" onclick="trackPackage()"><i class="fas fa-truck-moving"></i></button>
-</div>
-
-<div id="trackingResult" class="result"></div>
-</div>
-
-</div>
-
-<div id="settingsOverlay">
-<div class="settings-card">
-<button class="close-settings" onclick="closeSettings()"><i class="fas fa-xmark"></i></button>
-
-<h2>Settings</h2>
-
-<div class="theme-switch">
-<label>
-<input type="checkbox" id="themeToggle">
-<div class="switch">
-<i class="fas fa-lightbulb bulb"></i>
-<div class="bulb-glow"></div>
-</div>
-</label>
-<span id="themeLabel">Dark Mode</span>
-</div>
-
-<h3 style="margin-top:30px;">Tint Colors</h3>
-<div class="color-buttons">
-  <div class="color-btn" style="background:#1e90ff" onclick="changeColor('#1e90ff')"></div>
-  <div class="color-btn" style="background:#00ac17" onclick="changeColor('#00ac17')"></div>
-  <div class="color-btn" style="background:#ff0000" onclick="changeColor('#ff0000')"></div>
-  <div class="color-btn" style="background:#ffa600" onclick="changeColor('#ffa600')"></div>
-  <div class="color-btn" style="background:#6200ff" onclick="changeColor('#6200ff')"></div>
-  <div class="color-btn" style="background:#fd7e14" onclick="changeColor('#fd7e14')"></div>
-  <div class="color-btn" style="background:#00eaff" onclick="changeColor('#00eaff')"></div>
-  <div class="color-btn" style="background:#ff00dd" onclick="changeColor('#ff00dd')"></div>
-  <div class="color-btn" style="background:#77bbff" onclick="changeColor('#77bbff')"></div>
-  <div class="color-btn" style="background:#333333" onclick="changeColor('#333333')"></div>
-  <div class="color-btn" style="background:#7164ff" onclick="changeColor('#7164ff')"></div>
-</div>
-
-</div>
-</div>
-
-<script>
-const settingsOverlay = document.getElementById('settingsOverlay');
-const toggle = document.getElementById('themeToggle');
-const label = document.getElementById('themeLabel');
-const actionButtons = document.querySelectorAll('.action-btn');
-const topButtons = document.querySelectorAll('.icon-btn');
-const closeBtn = document.querySelector('.close-settings');
-const switchBtn = document.querySelector('.switch');
-const headerEl = document.querySelector('header');
-
-const customerName = document.getElementById('customerName');
-const email = document.getElementById('email');
-const address = document.getElementById('address');
-const item = document.getElementById('item');
-
-  const trackingNumber = document.getElementById('trackingNumber');
-const trackingResult = document.getElementById('trackingResult');
-
-function openSettings(){ settingsOverlay.classList.add('active'); }
-function closeSettings(){ settingsOverlay.classList.remove('active'); }
-
-toggle.addEventListener('change',()=>{
-  document.body.classList.toggle('light', toggle.checked);
-  label.textContent = toggle.checked ? 'Light Mode' : 'Dark Mode';
-});
-
-function addToCart(){ alert('Item added to cart!'); }
-
-function generateTrackingCode(){
-  if(!customerName.value || !email.value || !address.value || !item.value){
-    alert('Please fill out all delivery details.');
-    return;
-  }
-  const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let code='';
-  for(let i=0;i<5;i++) code+=chars[Math.floor(Math.random()*chars.length)];
-  trackingNumber.value=code;
-  alert('Delivery scheduled! Tracking code: '+code);
-}
-
-function trackPackage(){
-  trackingResult.textContent =
-    /^[A-Z0-9a-z]{5}$/.test(trackingNumber.value)
-    ? 'Package is in transit.'
-    : 'Invalid tracking number.';
-}
-
-function changeColor(color){
-  const glow = color + '66';
-  actionButtons.forEach(b=>{
-    b.style.background=color;
-    b.style.boxShadow=`0 8px 20px ${glow}`;
-  });
-  topButtons.forEach(b=>{
-    b.style.background=color;
-    b.style.boxShadow=`0 6px 18px ${glow}`;
-  });
-  closeBtn.style.background=color;
-  closeBtn.style.boxShadow=`0 6px 18px ${glow}`;
-  switchBtn.style.background=color;
-  headerEl.style.borderBottomColor=color;
-}
-</script>
-
-</body>
-</html>
+                    <html lang="en">
+                    <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=1500px, initial-scale=1.0">
+                    <title>EDT</title>
+
+                    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+                    <style>
+                    :root{
+                      --bg:#000;
+                      --surface:#111;
+                      --border:#2a2a2a;
+                      --text:#fff;
+                      --input-bg:#000;
+                      --blue:#1e90ff;
+                      --blue-dark:#1c6ed1;
+                      --shadow:0 20px 40px rgba(0,0,0,.6);
+                    }
+
+                    body.light{
+                      --bg:#f4f6f8;
+                      --surface:#fff;
+                      --border:#d0d7de;
+                      --text:#000;
+                      --input-bg:#f9f9f9;
+                      --shadow:0 20px 40px rgba(0,0,0,.15);
+                    }
+
+                    body{
+                      margin:0;
+                      font-family:'Orbitron',sans-serif;
+                      background:var(--bg);
+                      color:var(--text);
+                      transition:.4s;
+                    }
+
+                    header{
+                      background:var(--bg);
+                      padding:32px 20px 24px;
+                      border-bottom:4px solid var(--blue);
+                      text-align:center;
+                      position:relative;
+                    }
+
+                    header h1{ margin:0; font-size:42px; }
+                    header p{ margin-top:8px; opacity:.85; }
+
+                    .top-buttons{
+                      position:absolute;
+                      top:20px;
+                      right:20px;
+                      display:flex;
+                      gap:12px;
+                    }
+
+                    .icon-btn{
+                      width:52px;
+                      height:52px;
+                      border-radius:50%;
+                      background:var(--blue);
+                      color:#fff;
+                      border:none;
+                      font-size:20px;
+                      cursor:pointer;
+                      box-shadow:0 6px 18px rgba(30,144,255,.6);
+                      display:flex;
+                      align-items:center;
+                      justify-content:center;
+                      transition:.25s;
+                    }
+
+                    .icon-btn:hover{
+                      transform:scale(1.1);
+                      filter:brightness(1.15);
+                    }
+
+                    .content{ padding:80px 0; }
+
+                    .card{
+                      background:var(--surface);
+                      border-radius:48px;
+                      padding:64px;
+                      border:3px solid var(--border);
+                      box-shadow:var(--shadow);
+                      width:100%;
+                      max-width:1500px;
+                      margin:0 auto 120px;
+                      display:flex;
+                      flex-direction:column;
+                    }
+
+                    .card h2{ font-size:42px; margin-top:0; }
+
+                    .form-group{ margin-bottom:24px; }
+                    label{ display:block; margin-bottom:8px; }
+
+                    input, textarea{
+                      width:100%;
+                      padding:18px 24px;
+                      border-radius:24px;
+                      border:2px solid var(--border);
+                      background:var(--input-bg);
+                      color:var(--text);
+                      font-family:'Orbitron',sans-serif;
+                    }
+
+                    textarea{ resize:none; height:90px; }
+
+                    .form-actions{
+                      margin-top:32px;
+                      display:flex;
+                      gap:24px;
+                    }
+
+                    .action-btn{
+                      width:64px;
+                      height:64px;
+                      border-radius:50%;
+                      background:var(--blue);
+                      border:none;
+                      color:#fff;
+                      font-size:22px;
+                      cursor:pointer;
+                      box-shadow:0 8px 20px rgba(30,144,255,.6);
+                      transition:.25s;
+                    }
+
+                    .action-btn:hover{ transform:scale(1.1); }
+
+                    .result{ margin-top:24px; color:var(--blue); }
+
+                    #settingsOverlay{
+                      position:fixed;
+                      inset:0;
+                      background:var(--bg);
+                      display:none;
+                      z-index:2000;
+                      padding:40px 20px;
+                    }
+
+                    #settingsOverlay.active{ display:block; }
+
+                    .settings-card{
+                      max-width:800px;
+                      margin:0 auto;
+                      background:var(--surface);
+                      border-radius:48px;
+                      padding:64px;
+                      border:3px solid var(--border);
+                      box-shadow:var(--shadow);
+                      position:relative;
+                    }
+
+                    /* FIX 1: X BUTTON DEFAULT COLOR */
+                    .close-settings{
+                      position:absolute;
+                      top:24px;
+                      right:24px;
+                      width:52px;
+                      height:52px;
+                      border-radius:50%;
+                      background:var(--blue);
+                      border:none;
+                      color:#fff;
+                      font-size:22px;
+                      cursor:pointer;
+                      display:flex;
+                      align-items:center;
+                      justify-content:center;
+                      box-shadow:0 6px 18px rgba(30,144,255,.6);
+                      transition:.25s;
+                    }
+
+                    .close-settings:hover{
+                      transform:scale(1.1);
+                      filter:brightness(1.15);
+                    }
+
+                    /* THEME SWITCH */
+                    .theme-switch{
+                      margin-top:48px;
+                      display:flex;
+                      align-items:center;
+                      gap:12px;
+                    }
+
+                    .theme-switch input{ display:none; }
+
+                    /* FIX 2: SWITCH DEFAULT COLOR */
+                    .switch{
+                      width:90px;
+                      height:44px;
+                      background:var(--border);
+                      border-radius:30px;
+                      position:relative;
+                      cursor:pointer;
+                      transition:.4s;
+                    }
+
+                    .switch::after{
+                      content:"";
+                      width:36px;
+                      height:36px;
+                      background:var(--bg);
+                      border-radius:50%;
+                      position:absolute;
+                      top:4px;
+                      left:4px;
+                      transition:.4s;
+                    }
+
+                    .bulb{
+                      position:absolute;
+                      top:50%;
+                      left:22px;
+                      transform:translate(-50%,-50%);
+                      font-size:16px;
+                      color:#ffffff;
+                      z-index:2;
+                      transition:.4s;
+                    }
+
+                    .theme-switch input:checked + .switch{
+                      background:var(--blue);
+                    }
+
+                    .theme-switch input:checked + .switch::after{
+                      left:50px;
+                      background:#fff;
+                    }
+
+                    .theme-switch input:checked + .switch .bulb{
+                      left:68px;
+                      color:#000;
+                    }
+
+                    .theme-switch input:checked + .switch .bulb-glow{
+                      left:68px;
+                      opacity:1;
+                    }
+
+                    .color-buttons{
+                      margin-top:24px;
+                      display:flex;
+                      flex-wrap:wrap;
+                      gap:10px;
+                    }
+
+                    .color-btn{
+                      width:40px;
+                      height:40px;
+                      border-radius:50%;
+                      border:2px solid #000000;
+                      cursor:pointer;
+                    }
+                    </style>
+                    </head>
+
+                    <body>
+
+                    <header>
+                    <h1>EWELL DELIVERY TEAM</h1>
+                    <p>Delivery built with care.</p>
+
+                    <div class="top-buttons">
+                      <button class="icon-btn" onclick="openSettings()"><i class="fas fa-gear"></i></button>
+                      <button class="icon-btn" onclick="location.href='comix.html'"><i class="fas fa-book-open"></i></button>
+                      <button class="icon-btn" onclick="location.href='cart.html'"><i class="fas fa-shopping-cart"></i></button>
+                    </div>
+                    </header>
+
+                    <div class="content">
+
+                    <div class="card">
+                    <h2>Schedule a Delivery</h2>
+
+                    <div class="form-group"><label>Customer Name</label><input id="customerName"></div>
+                    <div class="form-group"><label>Email</label><input id="email" type="email"></div>
+                    <div class="form-group"><label>Delivery Address</label><textarea id="address"></textarea></div>
+                    <div class="form-group"><label>Item(s)</label><input id="item"></div>
+
+                    <div class="form-actions">
+                    <button class="action-btn" onclick="generateTrackingCode()"><i class="fas fa-box"></i></button>
+                    <button class="action-btn" onclick="addToCart()"><i class="fas fa-cart-plus"></i></button>
+                    </div>
+                    </div>
+
+                    <div class="card">
+                    <h2>Track Your Package</h2>
+                    <div class="form-group"><label>Tracking Number</label><input id="trackingNumber"></div>
+
+                    <div class="form-actions">
+                    <button class="action-btn" onclick="trackPackage()"><i class="fas fa-truck-moving"></i></button>
+                    </div>
+
+                    <div id="trackingResult" class="result"></div>
+                    </div>
+
+                    </div>
+
+                    <div id="settingsOverlay">
+                    <div class="settings-card">
+                    <button class="close-settings" onclick="closeSettings()"><i class="fas fa-xmark"></i></button>
+
+                    <h2>Settings</h2>
+
+                    <div class="theme-switch">
+                    <label>
+                    <input type="checkbox" id="themeToggle">
+                    <div class="switch">
+                    <i class="fas fa-lightbulb bulb"></i>
+                    <div class="bulb-glow"></div>
+                    </div>
+                    </label>
+                    <span id="themeLabel">Dark Mode</span>
+                    </div>
+
+                    <h3 style="margin-top:30px;">Tint Colors</h3>
+                    <div class="color-buttons">
+                      <div class="color-btn" style="background:#1e90ff" onclick="changeColor('#1e90ff')"></div>
+                      <div class="color-btn" style="background:#00ac17" onclick="changeColor('#00ac17')"></div>
+                      <div class="color-btn" style="background:#ff0000" onclick="changeColor('#ff0000')"></div>
+                      <div class="color-btn" style="background:#ffa600" onclick="changeColor('#ffa600')"></div>
+                      <div class="color-btn" style="background:#6200ff" onclick="changeColor('#6200ff')"></div>
+                      <div class="color-btn" style="background:#fd7e14" onclick="changeColor('#fd7e14')"></div>
+                      <div class="color-btn" style="background:#00eaff" onclick="changeColor('#00eaff')"></div>
+                      <div class="color-btn" style="background:#ff00dd" onclick="changeColor('#ff00dd')"></div>
+                      <div class="color-btn" style="background:#77bbff" onclick="changeColor('#77bbff')"></div>
+                      <div class="color-btn" style="background:#333333" onclick="changeColor('#333333')"></div>
+                      <div class="color-btn" style="background:#7164ff" onclick="changeColor('#7164ff')"></div>
+                    </div>
+
+                    </div>
+                    </div>
+
+                    <script>
+                    const settingsOverlay = document.getElementById('settingsOverlay');
+                    const toggle = document.getElementById('themeToggle');
+                    const label = document.getElementById('themeLabel');
+                    const actionButtons = document.querySelectorAll('.action-btn');
+                    const topButtons = document.querySelectorAll('.icon-btn');
+                    const closeBtn = document.querySelector('.close-settings');
+                    const switchBtn = document.querySelector('.switch');
+                    const headerEl = document.querySelector('header');
+
+                    const customerName = document.getElementById('customerName');
+                    const email = document.getElementById('email');
+                    const address = document.getElementById('address');
+                    const item = document.getElementById('item');
+
+                    function openSettings(){ settingsOverlay.classList.add('active'); }
+                    function closeSettings(){ settingsOverlay.classList.remove('active'); }
+
+                    toggle.addEventListener('change',()=>{
+                      document.body.classList.toggle('light', toggle.checked);
+                      label.textContent = toggle.checked ? 'Light Mode' : 'Dark Mode';
+                    });
+
+                    function addToCart(){ alert('Item added to cart!'); }
+
+                    function generateTrackingCode(){
+                      if(!customerName.value || !email.value || !address.value || !item.value){
+                        alert('Please fill out all delivery details.');
+                        return;
+                      }
+                      const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                      let code='';
+                      for(let i=0;i<5;i++) code+=chars[Math.floor(Math.random()*chars.length)];
+                      trackingNumber.value=code;
+                      alert('Delivery scheduled! Tracking code: '+code);
+                    }
+
+                    function trackPackage(){
+                      trackingResult.textContent =
+                        /^[A-Z0-9]{5}$/.test(trackingNumber.value)
+                        ? 'Package is in transit.'
+                        : 'Invalid tracking number.';
+                    }
+
+                    function changeColor(color){
+                      const glow = color + '66';
+                      actionButtons.forEach(b=>{
+                        b.style.background=color;
+                        b.style.boxShadow=`0 8px 20px ${glow}`;
+                      });
+                      topButtons.forEach(b=>{
+                        b.style.background=color;
+                        b.style.boxShadow=`0 6px 18px ${glow}`;
+                      });
+                      closeBtn.style.background=color;
+                      closeBtn.style.boxShadow=`0 6px 18px ${glow}`;
+                      switchBtn.style.background=color;
+                      headerEl.style.borderBottomColor=color;
+                    }
+                    </script>
+
+                    </body>
+              </html>
