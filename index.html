@@ -223,18 +223,15 @@ textarea{ resize:none; height:90px; }
   transition:.4s;
 }
 
-.bulb-glow{
+.bulb-02{
   position:absolute;
   top:50%;
   left:22px;
   transform:translate(-50%,-50%);
-  width:36px;
-  height:36px;
-  border-radius:50%;
-  background:radial-gradient(circle, rgba(255,255,255,.8), transparent 60%);
-  opacity:0;
+  font-size:16px;
+  color:#ffffff;
+  z-index:2;
   transition:.4s;
-  z-index:1;
 }
 
 .theme-switch input:checked + .switch{
@@ -329,7 +326,7 @@ textarea{ resize:none; height:90px; }
 <div class="bulb-glow"></div>
 </div>
 </label>
-<span id="themeLabel">Light Mode</span>
+<span id="themeLabel">Dark Mode</span>
 </div>
 
 <h3 style="margin-top:30px;">Tint Colors</h3>
@@ -342,7 +339,7 @@ textarea{ resize:none; height:90px; }
   <div class="color-btn" style="background:#fd7e14" onclick="changeColor('#fd7e14')"></div>
   <div class="color-btn" style="background:#20c997" onclick="changeColor('#20c997')"></div>
   <div class="color-btn" style="background:#e83e8c" onclick="changeColor('#e83e8c')"></div>
-  <div class="color-btn" style="background:#17a2b8" onclick="changeColor('#17a2b8')"></div>
+  <div class="color-btn" style="background:#77bbff" onclick="changeColor('#77bbff')"></div>
   <div class="color-btn" style="background:#343a40" onclick="changeColor('#343a40')"></div>
 </div>
 
@@ -364,7 +361,7 @@ function closeSettings(){ settingsOverlay.classList.remove('active'); }
 
 toggle.addEventListener('change',()=>{
   document.body.classList.toggle('light', toggle.checked);
-  label.textContent = toggle.checked ? 'Dark Mode' : 'Light Mode';
+  label.textContent = toggle.checked ? 'Light Mode' : 'Dark Mode';
 });
 
 function addToCart(){ alert('Item added to cart!'); }
