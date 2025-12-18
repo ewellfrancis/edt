@@ -43,11 +43,7 @@ body{
 
 header {
   position: relative;
-  left: 0;
-  right: 0;
-  padding: 32px 20px 24px;
-  background: var(--bg);
-  text-align: center;
+  width: 100%;  /* full screen width */
 }
 
 header::after {
@@ -55,7 +51,7 @@ header::after {
   position: absolute;
   left: 0;
   bottom: 0;
-  width: 100%;
+  width: 100vw;  /* full viewport width */
   height: 4px;
   background: var(--blue);
 }
