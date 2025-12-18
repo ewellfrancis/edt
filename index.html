@@ -97,6 +97,7 @@ header p{ margin-top:8px; opacity:.85; }
   border:3px solid var(--border);
   box-shadow:var(--shadow);
   width:100%;
+  max-width: 1500px;
   margin:0 auto 120px;
   display:flex;
   flex-direction:column;
@@ -164,7 +165,6 @@ textarea{ resize:none; height:90px; }
   position:relative;
 }
 
-/* FIX 1: X BUTTON DEFAULT COLOR */
 .close-settings{
   position:absolute;
   top:24px;
@@ -189,7 +189,6 @@ textarea{ resize:none; height:90px; }
   filter:brightness(1.15);
 }
 
-/* THEME SWITCH */
 .theme-switch{
   margin-top:48px;
   display:flex;
@@ -199,7 +198,6 @@ textarea{ resize:none; height:90px; }
 
 .theme-switch input{ display:none; }
 
-/* FIX 2: SWITCH DEFAULT COLOR */
 .switch{
   width:90px;
   height:44px;
@@ -391,7 +389,7 @@ function generateTrackingCode(){
     alert('Please fill out all delivery details.');
     return;
   }
-  const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let code='';
   for(let i=0;i<5;i++) code+=chars[Math.floor(Math.random()*chars.length)];
   trackingNumber.value=code;
@@ -400,7 +398,7 @@ function generateTrackingCode(){
 
 function trackPackage(){
   trackingResult.textContent =
-    /^[A-Z0-9]{5}$/.test(trackingNumber.value)
+    /^[A-Z0-9a-z]{5}$/.test(trackingNumber.value)
     ? 'Package is in transit.'
     : 'Invalid tracking number.';
 }
