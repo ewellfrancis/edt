@@ -38,11 +38,13 @@ body{
 }
 header {
   position: relative;
-  width: 100vw; /* full viewport width */
-  padding: 32px 0 24px; /* only vertical padding */
+  left: 0;
+  right: 0;
+  padding: 32px 20px 24px;
   background: var(--bg);
   text-align: center;
-  overflow: hidden;
+  border-bottom: 4px solid var(--blue);
+  box-sizing: border-box;
 }
 
 header::after {
