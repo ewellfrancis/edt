@@ -367,19 +367,19 @@
                         alert('Please fill out all delivery details.');
                         return;
                       }
-                      const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                      const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
                       let code='';
                       for(let i=0;i<5;i++) code+=chars[Math.floor(Math.random()*chars.length)];
                       trackingNumber.value=code;
                       alert('Delivery scheduled! Tracking code: '+code);
-                    }
+                      }
 
                     function trackPackage(){
                       trackingResult.textContent =
-                        /^[A-Z0-9]{5}$/.test(trackingNumber.value)
-                        ? 'Package is in transit.'
-                        : 'Invalid tracking number.';
-                    }
+                      /^[A-Za-z0-9]{5}$/.test(trackingNumber.value)
+                      ? 'Package is in transit.'
+                      : 'Invalid tracking number.';
+                      }
 
                     function changeColor(color){
                       const glow = color + '66';
