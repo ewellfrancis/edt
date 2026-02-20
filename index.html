@@ -306,37 +306,73 @@
                     <div class="settings-card">
                     <button class="close-settings" onclick="closeSettings()"><i class="fas fa-xmark"></i></button>
 
-                    <h2>Settings</h2>
+<h2>Settings</h2>
 
-                    <div class="theme-switch">
-                    <label>
-                    <input type="checkbox" id="themeToggle">
-                    <div class="switch">
-                    <i class="fas fa-lightbulb bulb"></i>
-                    <div class="bulb-glow"></div>
-                    </div>
-                    </label>
-                    <span id="themeLabel">Dark Mode</span>
-                    </div>
+<h3 style="margin-top:30px;">Background Themes</h3>
+<div class="theme-buttons">
+  <div class="theme-btn" style="background:#000000" onclick="changeTheme('#000000')"></div>
+  <div class="theme-btn" style="background:#1e1e2f" onclick="changeTheme('#1e1e2f')"></div>
+  <div class="theme-btn" style="background:#f4f6f8" onclick="changeTheme('#f4f6f8')"></div>
+  <div class="theme-btn" style="background:#ffeedd" onclick="changeTheme('#ffeedd')"></div>
+  <div class="theme-btn" style="background:#6200ff" onclick="changeTheme('#6200ff')"></div>
+</div>
 
-                    <h3 style="margin-top:30px;">Tint Colors</h3>
-                    <div class="color-buttons">
-                      <div class="color-btn" style="background:#1e90ff" onclick="changeColor('#1e90ff')"></div>
-                      <div class="color-btn" style="background:#00ac17" onclick="changeColor('#00ac17')"></div>
-                      <div class="color-btn" style="background:#ff0000" onclick="changeColor('#ff0000')"></div>
-                      <div class="color-btn" style="background:#ffa600" onclick="changeColor('#ffa600')"></div>
-                      <div class="color-btn" style="background:#6200ff" onclick="changeColor('#6200ff')"></div>
-                      <div class="color-btn" style="background:#fd7e14" onclick="changeColor('#fd7e14')"></div>
-                      <div class="color-btn" style="background:#00eaff" onclick="changeColor('#00eaff')"></div>
-                      <div class="color-btn" style="background:#ff00dd" onclick="changeColor('#ff00dd')"></div>
-                      <div class="color-btn" style="background:#77bbff" onclick="changeColor('#77bbff')"></div>
-                      <div class="color-btn" style="background:#000000" onclick="changeColor('#000000')"></div>
-                      <div class="color-btn" style="background:#7164ff" onclick="changeColor('#7164ff')"></div>
-                      <div class="color-btn" style="background:#ffffff" onclick="changeColor('#ffffff')"></div>
-                    </div>
+<h3 style="margin-top:30px;">Tint Colors</h3>
+<div class="color-buttons">
+  <div class="color-btn" style="background:#1e90ff" onclick="changeColor('#1e90ff')"></div>
+  <div class="color-btn" style="background:#00ac17" onclick="changeColor('#00ac17')"></div>
+  <div class="color-btn" style="background:#ff0000" onclick="changeColor('#ff0000')"></div>
+  <div class="color-btn" style="background:#ffa600" onclick="changeColor('#ffa600')"></div>
+  <div class="color-btn" style="background:#6200ff" onclick="changeColor('#6200ff')"></div>
+  <div class="color-btn" style="background:#fd7e14" onclick="changeColor('#fd7e14')"></div>
+  <div class="color-btn" style="background:#00eaff" onclick="changeColor('#00eaff')"></div>
+  <div class="color-btn" style="background:#ff00dd" onclick="changeColor('#ff00dd')"></div>
+  <div class="color-btn" style="background:#77bbff" onclick="changeColor('#77bbff')"></div>
+  <div class="color-btn" style="background:#000000" onclick="changeColor('#000000')"></div>
+  <div class="color-btn" style="background:#7164ff" onclick="changeColor('#7164ff')"></div>
+  <div class="color-btn" style="background:#ffffff" onclick="changeColor('#ffffff')"></div>
+</div>
 
-                    </div>
-                    </div>
+<style>
+.theme-buttons{
+  margin-top:24px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.theme-btn{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  border:2px solid #000;
+  cursor:pointer;
+}
+</style>
+
+<script>
+function changeTheme(color){
+  document.body.style.background = color;
+  document.body.style.transition = "background 0.4s";
+
+  // Adjust cards and header text for contrast
+  document.querySelectorAll('.card, .settings-card, header').forEach(el=>{
+    const lightBg = isLight(color);
+    el.style.background = lightBg ? '#fff' : '#111';
+    el.style.color = lightBg ? '#000' : '#fff';
+  });
+}
+
+// Helper to detect light/dark background
+function isLight(color){
+  const c = color.substring(1);
+  const r = parseInt(c.substr(0,2),16);
+  const g = parseInt(c.substr(2,2),16);
+  const b = parseInt(c.substr(4,2),16);
+  const brightness = (r*299 + g*587 + b*114)/1000;
+  return brightness > 128;
+}
+</script>
 
                     <script>
                     const settingsOverlay = document.getElementById('settingsOverlay');
